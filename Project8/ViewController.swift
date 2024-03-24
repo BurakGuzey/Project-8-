@@ -31,14 +31,40 @@ class ViewController: UIViewController {
         cluesLabel.font = UIFont.systemFont(ofSize: 24)
         cluesLabel.text = "CLUES"
         cluesLabel.numberOfLines = 0
+        cluesLabel.setContentHuggingPriority(UILayoutPriority(1), for: .vertical)
         view.addSubview(cluesLabel)
         
         answersLabel = UILabel()
         answersLabel.translatesAutoresizingMaskIntoConstraints = false
         answersLabel.font = UIFont.systemFont(ofSize: 24)
+        answersLabel.textAlignment = .right
         answersLabel.text = "ANSWERS"
         answersLabel.numberOfLines = 0
+        answersLabel.setContentHuggingPriority(UILayoutPriority(1), for: .vertical)
         view.addSubview(answersLabel)
+        
+        currentAnswer = UITextField()
+        currentAnswer.translatesAutoresizingMaskIntoConstraints = false
+        currentAnswer.font = UIFont.systemFont(ofSize: 44)
+        currentAnswer.placeholder = "Tap letter to guess"
+        currentAnswer.textAlignment = .center
+        currentAnswer.isUserInteractionEnabled = false
+        view.addSubview(currentAnswer)
+        
+        let submit = UIButton(type: .system)
+        submit.translatesAutoresizingMaskIntoConstraints = false
+        submit.setTitle("SUBMIT", for: .normal)
+        view.addSubview(submit)
+        
+        let clear = UIButton(type: .system)
+        clear.translatesAutoresizingMaskIntoConstraints = false
+        clear.setTitle("CLEAR", for: .normal)
+        view.addSubview(clear)
+        
+        let buttonView = UIView()
+        buttonView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(buttonView)
+        
         
         NSLayoutConstraint.activate([
             scoreLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
@@ -51,11 +77,46 @@ class ViewController: UIViewController {
             answersLabel.topAnchor.constraint(equalTo: scoreLabel.bottomAnchor),
             answersLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: -100),
             answersLabel.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor, multiplier: 0.4, constant: -100),
-            answersLabel.heightAnchor.constraint(equalTo: cluesLabel.heightAnchor)
+            answersLabel.heightAnchor.constraint(equalTo: cluesLabel.heightAnchor),
+            
+            currentAnswer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            currentAnswer.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5),
+            currentAnswer.topAnchor.constraint(equalTo: cluesLabel.bottomAnchor, constant: 20),
+            
+            submit.topAnchor.constraint(equalTo: currentAnswer.bottomAnchor),
+            submit.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            submit.heightAnchor.constraint(equalToConstant: 44),
+            
+            clear.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 100),
+            clear.centerYAnchor.constraint(equalTo: submit.centerYAnchor),
+            clear.heightAnchor.constraint(equalToConstant: 44),
+            
+            buttonView.widthAnchor.constraint(equalToConstant: 758),
+            buttonView.heightAnchor.constraint(equalToConstant: 320),
+            buttonView.topAnchor.constraint(equalTo: submit.bottomAnchor),
+            buttonView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            buttonView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -20)
+            
         ])
         
-        cluesLabel.backgroundColor = .red
-        answersLabel.backgroundColor = .blue
+        let width = 150
+        let height = 80
+        
+        for row in 0..<4 {
+            for column in 0..<5 {
+                let letterButton = UIButton(type: .system)
+                letterButton.titleLabel?.font = UIFont.systemFont(ofSize: 36)
+                letterButton.setTitle("WWW", for: .normal)
+                
+                let frame = CGRect(x: column * width, y: row * height, width: width, height: height)
+                letterButton.frame = frame
+                
+                buttonView.addSubview(letterButton)
+                letterButtons.append(letterButton)
+                
+            }
+        }
+    
     }
 
     override func viewDidLoad() {
