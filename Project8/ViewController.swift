@@ -18,7 +18,11 @@ class ViewController: UIViewController {
     var activatedButtons = [UIButton]()
     var solutions = [String]()
     
-    var score = 0
+    var score = 0 {
+        didSet {
+            scoreLabel.text = "Score: \(score)"
+        }
+    }
     var level = 1
     
     override func loadView() {
@@ -59,14 +63,18 @@ class ViewController: UIViewController {
         
         let submit = UIButton(type: .system)
         submit.translatesAutoresizingMaskIntoConstraints = false
-        submit.setTitle("SUBMIT", for: .normal)
+        submit.setTitle("  SUBMIT  ", for: .normal)
         submit.addTarget(self, action: #selector(submitTapped), for: .touchUpInside)
+        submit.layer.borderWidth = 3
+        submit.layer.borderColor = UIColor.lightGray.cgColor
         view.addSubview(submit)
         
         let clear = UIButton(type: .system)
         clear.translatesAutoresizingMaskIntoConstraints = false
-        clear.setTitle("CLEAR", for: .normal)
+        clear.setTitle("  CLEAR  ", for: .normal)
         clear.addTarget(self, action: #selector(clearTapped), for: .touchUpInside)
+        clear.layer.borderWidth = 3
+        clear.layer.borderColor = UIColor.lightGray.cgColor
         view.addSubview(clear)
         
         let buttonView = UIView()
@@ -156,11 +164,19 @@ class ViewController: UIViewController {
                 currentAnswer.text = ""
                 score += 1
                 
-                if score % 7 == 0 {
+                scoreLabel.text = "Score: \(score)"
+                
+                if score >= 4 {
                     let ac = UIAlertController(title: "Well Done!", message: "Are you ready for the next level?", preferredStyle: .alert)
                     ac.addAction(UIAlertAction(title: "Let's Go!", style: .default, handler: levelUp))
                     present(ac, animated: true)
                 }
+            } else {
+                let ac = UIAlertController(title: "WRONG", message: "You need To guess again", preferredStyle: .alert)
+                ac.addAction(UIAlertAction(title: "Continue", style: .default))
+                present(ac, animated: true)
+                
+                score -= 1
             }
         }
     
@@ -223,6 +239,5 @@ class ViewController: UIViewController {
             }
         }
     }
-
 }
 
